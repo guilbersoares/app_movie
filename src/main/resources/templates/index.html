@@ -1,0 +1,122 @@
+<!DOCTYPE html> 
+<html lang="en" xmlns:th="http://www.thymeleaf.org"> 
+    <head> 
+        <meta charset="utf-8"> 
+        <title>Gerenciamento de Filmes</title> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> 
+        <link th:href="@{/css/}+${css}+'.css'" rel="stylesheet" type="text/css"/>
+    </head> 
+    <body> 
+        <div class="container my-2"> 
+            <h1>Lista de Filmes</h1> 
+            
+            <h3>Informe suas preferências para a página em questão:</h3> 
+                <form th:action="@{/preferencias}" method="POST"> 
+                    <p><label for="selEstilo">Seu esquema de cores favorito</label> 
+                    <select name="estilo" id="selEstilo"> 
+                        <option value="claro">Tema Claro</option> 
+                        <option value="escuro">Tema Escuro</option> 
+                    </select></p> 
+                    <p><input type="submit" value="OK"/></p> 
+                </form> 
+            
+            <a th:href="@{/criarFilmeForm}" class="btn btn-primary btn-sm mb-3"> Adicionar </a> 
+            <table border="1" class="table table-striped table-responsive-md"> 
+
+                <thead> 
+                    <tr> 
+                        <th>ID</th> 
+                        <th>Título</th> 
+                        <th>Sinopse</th> 
+                        <th>Gênero</th> 
+                        <th>Ano</th>  
+                    </tr> 
+                </thead> 
+                <tbody id="tabelaFilmes"> 
+                
+                </tbody> 
+            </table>  
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script>
+            $(document).ready(function () {
+    // Função para carregar os filmes da API e exibi-los na tabela
+    function carregarFilmes() {
+        
+        $.ajax({
+            url: 'http://localhost:8080/filmes/listar',
+            method: 'GET',
+            success: function (data) {
+                
+                // Limpa a tabela de filmes
+                $('#tabelaFilmes').empty();
+                // Adiciona cada filme à tabela
+                data.forEach(filme => {
+                    let tr = $('<tr>');
+                    tr.append('<td>' + filme.id + '</td>');
+                    tr.append('<td>' + filme.titulo + '</td>');
+                    tr.append('<td>' + filme.sinopse + '</td>');
+                    tr.append('<td>' + filme.genero + '</td>');
+                    tr.append('<td>' + filme.ano + '</td>');
+                    let botaoDeletar = $('<button>')
+                        .text('Excluir')
+                        .click(function () {
+                            deletarFilme(filme.id);
+                        });
+
+                    let botaoAtualizar = $('<button>')
+                        .text('Atualizar')
+                        .click(function () {
+                            window.location.href = 'http://localhost:8080/atualizarFilmeForm/' + filme.id;
+                        });
+                    
+                    let botaoAnalise = $('<button>')
+                        .text('Adicionar Analise')
+                        .click(function () {
+                            window.location.href = 'http://localhost:8080/criarAnaliseForm/' + filme.id;
+                        });
+                    
+                    let botaoMostraAnalise = $('<button>')
+                        .text('Mostrar Analise')
+                        .click(function () {
+                            window.location.href = 'http://localhost:8080/exibeAnalise/' + filme.id;
+                        });
+                    
+                    let tdBotoes = $('<td>').append(botaoAtualizar).append(botaoDeletar).append(botaoAnalise).append(botaoMostraAnalise);
+                    tr.append(tdBotoes);
+                    $('#tabelaFilmes').append(tr);
+                })
+                
+            },
+            error: function () {
+                alert('Não foi possível carregar os filmes da API.');
+                
+            }
+        });
+    }
+
+    function deletarFilme(id) {
+        $.ajax({
+            url: 'http://localhost:8080/filmes/deletar/' + id,
+            method: 'DELETE',
+            success: function (data) {
+                alert('Filme removido na API com sucesso!');
+                // Recarrega a lista de filmes
+                carregarFilmes();
+            },
+            error: function () {
+                alert('Não foi possível deletar o filme na API.');
+            }
+        });
+    }
+
+    
+
+    // Carrega os filmes ao abrir a página
+    carregarFilmes();
+});
+
+            
+        </script>
+    </body> 
+</html>

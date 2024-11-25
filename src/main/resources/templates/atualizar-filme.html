@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Cadastro de Filmes</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/css/}+${css}+'.css'" rel="stylesheet" type="text/css"/>
+    
+</head>
+
+<body>
+   
+
+     <div class="container"> 
+        <h1>Gerenciamento de Filmes</h1> 
+        
+       
+        <hr> 
+            <h2>Adicionar</h2> 
+            <form id="formFilme" method="POST"> 
+                <input type="text" id="titulo" placeholder="Insira o Título" class="form-control mt-4 col-4"> 
+                <input type="text" id="sinopse" placeholder="Digite a Sinopse do Filme" class="form-control mt-4 col-4"> 
+                <input type="text" id="genero" placeholder="Insira o Genero" class="form-control mt-4 col-4"> 
+                <input type="number" id="ano" placeholder="Insira o Ano do Filme" class="form-control mt-4 col-4"> 
+                 
+            <input type="hidden"/>
+                <button type="submit" class="buttonSubmit"> Salvar</button> 
+            </form> 
+            <hr> 
+        <a th:href="@{/}"> Retornar</a> 
+        </div> 
+    
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+        <script th:src="@{/js/atualizarFilme.js}"></script>
+    
+    </body>
+</html>
